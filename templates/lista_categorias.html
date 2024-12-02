@@ -1,0 +1,89 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block contenido %}
+<div class="container-fluid py-0" style="height: 80vh; display: flex; flex-direction: column;">
+    <div class="row mt-0" style="flex: 1;">
+        <div class="col-lg-7 mb-lg-0 mb-4" style="height: 100%;">
+            <div class="card z-index-2 h-100">
+                <div class="card-header pb-0 pt-3 bg-transparent">
+                    <h6 class="text-capitalize ms-3">Productos</h6>
+                </div>
+                <div class="card-body p-3 m-4" style="height: 100%;">
+
+                {% if user.is_superuser %}
+                  <a href="{% url 'agregar_categoria' %}" class="btn btn-secondary mb-5 ">Agregar Categoria</a>
+                {% endif %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if categorias %}
+            {% for categoria in categorias %}
+                <tr>
+                    <td>{{ categoria.nombre }}</td>
+                        <td>
+                            {% if user.is_superuser %}
+                                <a href="{% url 'editar_categoria' categoria.id %}" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
+                                <form action="{% url 'eliminar_categoria' categoria.id %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td class="text-center" colspan="2">No hay categorías disponibles.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5" style="height: 100%;">
+            <div class="card card-carousel overflow-hidden h-100 p-0">
+                <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
+                    <div class="carousel-inner border-radius-lg h-100">
+                        <div class="carousel-item h-100 active" style="background-image: url({% static 'assets/img/carousel-1.jpg' %}); background-size: cover; height: 100%;">
+
+                        </div>
+                        <div class="carousel-item h-100" style="background-image: url({% static 'assets/img/carousel-2.jpg' %}); background-size: cover; height: 100%;">
+
+                        </div>
+                        <div class="carousel-item h-100" style="background-image: url({% static 'assets/img/carousel-3.jpg' %}); background-size: cover; height: 100%;">
+
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev w-5 me-3" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next w-5 me-3" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('table').DataTable();
+});
+</script>
+{% endblock %}

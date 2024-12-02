@@ -1,0 +1,60 @@
+{% extends 'base/base.html' %}
+
+{% block contenido %}
+<div class="container-fluid py-0" style="height: 80vh; display: flex; flex-direction: column;">
+    <div class="row mt-0" style="flex: 1;">
+        <div class="col-lg-3 mb-lg-0 mb-4 offset-4" style="height: 100%;">
+            <div class="card z-index-2 h-100">
+                <div class="card-body p-3 m-4" style="height: 100%; background-color: white">
+
+                  <h2 class="text-center mb-4">Producto</h2>
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% if form.errors %}
+                            <div class="alert alert-warning text-bg-light mt-3">
+                                <ul>
+                                    {% for field in form %}
+                                        {% for error in field.errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label for="{{ form.nombre.id_for_label }}" class="form-label">Nombre del Producto</label>
+                            <input type="text" class="form-control" id="{{ form.nombre.id_for_label }}" name="{{ form.nombre.name }}" value="{{ form.nombre.value }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.descripcion.id_for_label }}" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="{{ form.descripcion.id_for_label }}" name="{{ form.descripcion.name }}" rows="3">{{ form.descripcion.value }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.precio.id_for_label }}" class="form-label">Precio</label>
+                            <input type="number" class="form-control" id="{{ form.precio.id_for_label }}" name="{{ form.precio.name }}" value="{{ form.precio.value }}" step="0.01">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.categoria.id_for_label }}" class="form-label">Categoría</label>
+                            <select class="form-select" id="{{ form.categoria.id_for_label }}" name="{{ form.categoria.name }}">
+                                <option value="" disabled selected>Seleccione una categoría</option>
+                                {% for categoria in form.categoria.field.queryset %}
+                                    <option value="{{ categoria.id }}" {% if form.categoria.value == categoria.id %}selected{% endif %}>{{ categoria.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">Guardar Producto</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
